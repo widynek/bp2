@@ -14,7 +14,7 @@ fi
 docker pull composer
 
 docker run --rm --interactive --tty \
-    --volume $PWD/laravel:/var/www/ \
+    --volume $PWD:/var/www/ \
     --name composer \
     --workdir "/var/www/" \
     composer ${COMPOSER_COMMAND}
