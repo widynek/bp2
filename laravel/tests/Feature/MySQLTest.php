@@ -10,8 +10,6 @@ use Tests\TestCase;
 
 class MySQLTest extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      * @var ConnectionInterface
      */
@@ -19,11 +17,12 @@ class MySQLTest extends TestCase
 
     public function setUp(): void
     {
-        $this->markTestSkipped('todo failing test');
         parent::setUp();
 
-        $this->seed();
         $this->queryBuilder = $this->app->make(ConnectionInterface::class);
+        $this->waitForMySQL();
+
+        $this->seed();
     }
 
     public function testTransactionsTableHasRecords(): void
@@ -35,5 +34,22 @@ class MySQLTest extends TestCase
 
         // assert
         $this->assertGreaterThan(0, $actualCount);
+    }
+
+    private function waitForMySQL(): void
+    {
+        $numberOfTries = 20;
+
+        for ($i = 1; $i < $numberOfTries; $i++) {
+            try {
+                $this->queryBuilder->statement('SHOW TABLES');
+                return;
+            } catch (\PDOException $e) {
+                sleep(1);
+                $msg = (string) $e;
+            }
+        }
+
+        $this->fail('Could not connect to MySQL - giving up after: ' . $i . ' tries. Last error: ' . $msg);
     }
 }

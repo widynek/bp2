@@ -1,5 +1,8 @@
 # Instructions from the author on using this repository
 
+# TODO
+* DB should not be accessed with ROOT credentials
+
 It should be platform independent as long as you have Docker & Docker Compose installed.
 - clone the repository
 - run `cd laravel`
