@@ -1,4 +1,11 @@
-## PHP Technical test
+# Instructions from the author on using this repository
+
+I've tested below on Ubuntu 20.04 . It should be platform independent as long as you have Docker installed.
+- clone the repository
+- run `./composer.sh install` to install dependencies
+- run `./run_tests.sh laravel/tests` to check if PHPUnit works
+
+# PHP Technical test
 
 ### 2.
 
