@@ -7,6 +7,7 @@ namespace Tests\Feature\Services;
 use App\Services\TransactionsRetriever;
 use App\Services\TransactionsRetrieverFactory;
 use Illuminate\Contracts\Config\Repository;
+use Illuminate\Database\ConnectionInterface;
 use Tests\TestCase;
 
 class TransactionsRetrieverFactoryTest extends TestCase
@@ -25,7 +26,10 @@ class TransactionsRetrieverFactoryTest extends TestCase
 
     private function buildFactory(): TransactionsRetrieverFactory
     {
-        return new TransactionsRetrieverFactory($this->app->make(Repository::class));
+        return new TransactionsRetrieverFactory(
+            $this->app->make(Repository::class),
+            $this->app->make(ConnectionInterface::class),
+        );
     }
 
     /**

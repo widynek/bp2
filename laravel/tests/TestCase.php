@@ -9,7 +9,7 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    protected function waitForMySQL(ConnectionInterface $connection): void
+    protected function waitForDb(ConnectionInterface $connection): void
     {
         $numberOfTries = 20;
 
@@ -26,8 +26,18 @@ abstract class TestCase extends BaseTestCase
         $this->fail('Could not connect to MySQL - giving up after: ' . $i . ' tries. Last error: ' . $msg);
     }
 
-    protected function clearMySQL(): void
+    protected function clearDb(): void
     {
         $this->artisan('migrate:fresh');
+    }
+
+    protected function loadDbDumpFromFile(ConnectionInterface $connection, string $pathToDump): void
+    {
+        if (!\file_exists($pathToDump)) {
+            throw new \RuntimeException('No dump found in ' . $pathToDump);
+        }
+        $rawSql = \file_get_contents($pathToDump);
+
+        $connection->unprepared($rawSql);
     }
 }

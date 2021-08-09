@@ -5,12 +5,21 @@ declare(strict_types=1);
 namespace Tests\Feature\Services;
 
 use Illuminate\Contracts\Config\Repository;
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Testing\TestResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class TransactionsControllerTest extends TestCase
 {
+    private ConnectionInterface $dbConnection;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->dbConnection = $this->app->make(ConnectionInterface::class);
+    }
+
     public function testEmitsBadRequestOnUnknownSource(): void
     {
         // arrange
@@ -20,6 +29,25 @@ class TransactionsControllerTest extends TestCase
 
         // assert
         $this->assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+    }
+
+    public function testRespondsWithJsonOnDbRequest(): void
+    {
+        // arrange
+        $this->arrangeDbWithTransactions();
+
+        // act
+        $response = $this->get('/api/transactions?source=db');
+
+        // assert
+        $this->assertRespondedWithJson($response);
+    }
+
+    private function arrangeDbWithTransactions(): void
+    {
+        $this->waitForDb($this->dbConnection);
+        $this->clearDb();
+        $this->loadDbDumpFromFile($this->dbConnection, 'tests/Artefacts/transactions.sql');
     }
 
     public function testRespondsWithJsonOnCsvRequest(): void

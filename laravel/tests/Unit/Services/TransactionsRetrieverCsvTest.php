@@ -51,7 +51,7 @@ class TransactionsRetrieverCsvTest extends TestCase
             [
                 'id' => 1,
                 'code' => 'T_218_ljydmgebx',
-                'amount' => 8617.19,
+                'amount' => '8617.19',
                 'user_id' => 375,
                 'created_at' => '2020-01-19 16:08:59',
                 'updated_at' => '2020-01-19 16:08:59',
@@ -59,7 +59,7 @@ class TransactionsRetrieverCsvTest extends TestCase
             [
                 'id' => 2,
                 'code' => 'T_335_wmhrbjxld',
-                'amount' => 6502.72,
+                'amount' => '6502.72',
                 'user_id' => 1847,
                 'created_at' => '2020-01-19 16:08:59',
                 'updated_at' => '2020-01-19 16:08:59',

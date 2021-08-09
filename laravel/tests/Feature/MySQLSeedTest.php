@@ -18,8 +18,8 @@ class MySQLSeedTest extends TestCase
     {
         parent::setUp();
         $this->dbConnection = $this->app->make(ConnectionInterface::class);
-        $this->waitForMySQL($this->dbConnection);
-        $this->clearMySQL();
+        $this->waitForDb($this->dbConnection);
+        $this->clearDb();
     }
 
     public function testDatabaseConnectionWorks(): void

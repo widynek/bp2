@@ -34,7 +34,10 @@ class TransactionsRetrieverCsv implements TransactionsRetriever
 
         foreach ($lines as $line) {
             $rowValues = $this->parseLine($line);
-            $transactions[] = \array_combine($columnNames, $rowValues);
+            $transaction = \array_combine($columnNames, $rowValues);
+            $transaction['id'] = (int) $transaction['id'];
+            $transaction['user_id'] = (int) $transaction['user_id'];
+            $transactions[] = $transaction;
         }
 
         return $transactions;
@@ -61,18 +64,6 @@ class TransactionsRetrieverCsv implements TransactionsRetriever
 
     private function parseLine(string $line): array
     {
-        $fields = \str_getcsv($line, self::COLUMN_SEPARATOR);
-
-        return \array_map(function($field) {
-            if (\is_numeric($field) === false) {
-                return $field;
-            }
-
-            if (\strpos($field, '.') !== false) {
-                return (float) $field;
-            }
-
-            return (int) $field;
-        }, $fields);
+        return \str_getcsv($line, self::COLUMN_SEPARATOR);
     }
 }
