@@ -3,6 +3,7 @@
 It should be platform independent as long as you have Docker & Docker Compose installed.
 - clone the repository
 - run `cd laravel`
+- run `cp -f .env.example .env`
 - run `./composer.sh install` to install dependencies
 - run `./run_tests.sh` to run all automated tests
 
