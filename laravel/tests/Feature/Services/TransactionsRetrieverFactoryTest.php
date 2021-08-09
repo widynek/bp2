@@ -2,23 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit;
+namespace Tests\Feature\Services;
 
 use App\Services\TransactionsRetriever;
 use App\Services\TransactionsRetrieverFactory;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class TransactionsRetrieverFactoryTest extends TestCase
 {
     public function testThrowsExceptionOnUnknownSource(): void
     {
         // arrange
+        $factory = new TransactionsRetrieverFactory($this->app);
 
         // assert
         $this->expectException(\InvalidArgumentException::class);
 
         // act
-        TransactionsRetrieverFactory::create('html');
+        $factory->create('html');
     }
 
     /**
@@ -27,9 +28,10 @@ class TransactionsRetrieverFactoryTest extends TestCase
     public function testCreatesRetrieverForKnownSource(string $source): void
     {
         // arrange
+        $factory = new TransactionsRetrieverFactory($this->app);
 
         // act
-        $retriever = TransactionsRetrieverFactory::create($source);
+        $retriever = $factory->create($source);
 
         // assert
         $this->assertInstanceOf(TransactionsRetriever::class, $retriever);
@@ -37,7 +39,12 @@ class TransactionsRetrieverFactoryTest extends TestCase
 
     public function validSources(): \Generator
     {
-        yield ['csv'];
-        yield ['db'];
+        yield [
+            'source' => 'csv',
+        ];
+
+        yield [
+            'source' => 'db',
+        ];
     }
 }
