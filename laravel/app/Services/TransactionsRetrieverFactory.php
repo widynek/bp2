@@ -4,18 +4,15 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use Illuminate\Contracts\Container\Container;
+use Illuminate\Contracts\Config\Repository;
 
 class TransactionsRetrieverFactory
 {
-    /**
-     * @var Container
-     */
-    private Container $container;
+    private Repository $config;
 
-    public function __construct(Container $container)
+    public function __construct(Repository $config)
     {
-        $this->container = $container;
+        $this->config = $config;
     }
 
     public function create(string $source): TransactionsRetriever
@@ -24,7 +21,7 @@ class TransactionsRetrieverFactory
             case 'db':
                 return new TransactionsRetrieverDb();
             case 'csv':
-                $pathToCsv = $this->container->make('path.storage') . \DIRECTORY_SEPARATOR . 'transactions.csv';
+                $pathToCsv = $this->config->get('transactions.csv.path');
                 return new TransactionsRetrieverCsv($pathToCsv);
         }
 

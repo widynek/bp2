@@ -6,6 +6,7 @@ namespace Tests\Feature\Services;
 
 use App\Services\TransactionsRetriever;
 use App\Services\TransactionsRetrieverFactory;
+use Illuminate\Contracts\Config\Repository;
 use Tests\TestCase;
 
 class TransactionsRetrieverFactoryTest extends TestCase
@@ -13,7 +14,7 @@ class TransactionsRetrieverFactoryTest extends TestCase
     public function testThrowsExceptionOnUnknownSource(): void
     {
         // arrange
-        $factory = new TransactionsRetrieverFactory($this->app);
+        $factory = $this->buildFactory();
 
         // assert
         $this->expectException(\InvalidArgumentException::class);
@@ -22,13 +23,18 @@ class TransactionsRetrieverFactoryTest extends TestCase
         $factory->create('html');
     }
 
+    private function buildFactory(): TransactionsRetrieverFactory
+    {
+        return new TransactionsRetrieverFactory($this->app->make(Repository::class));
+    }
+
     /**
      * @dataProvider validSources
      */
     public function testCreatesRetrieverForKnownSource(string $source): void
     {
         // arrange
-        $factory = new TransactionsRetrieverFactory($this->app);
+        $factory = $this->buildFactory();
 
         // act
         $retriever = $factory->create($source);
