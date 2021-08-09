@@ -8,9 +8,6 @@ class TransactionsRetrieverCsv implements TransactionsRetriever
 {
     private const COLUMN_SEPARATOR = ',';
 
-    /**
-     * @var string
-     */
     private string $pathToCsvFile;
 
     public function __construct(string $pathToCsvFile)
